@@ -100,10 +100,20 @@ Persist the active strong constraints in a repository memory file:
 - When skill constraints change, synchronize `CLAUDE.md` in the same workflow.
 - Activation behavior:
   - On `/use-codex-llm` activation, perform the `CLAUDE.md` sync immediately as the first executable action.
+  - Treat skill activation itself as explicit authorization for this `CLAUDE.md` sync action.
+  - Run this sync even when `CLAUDE.md` already exists (update/replace the canonical block).
   - If `CLAUDE.md` is missing, call `Write` to create it.
   - If `CLAUDE.md` exists, call `Edit` to update/replace this skill's canonical memory block.
   - Do not return a "skill loaded" acknowledgment as the only output when sync has not been executed.
   - The first response after activation should include real tool execution (Write/Edit) evidence.
+
+Activation runbook (must execute in order):
+1. Resolve repository root and target path `CLAUDE.md`.
+2. Use `Read` on `CLAUDE.md` if present.
+3. If absent, use `Write` to create `CLAUDE.md` with this skill's canonical constraint section (English only).
+4. If present, use `Edit` to replace the existing canonical section in place (idempotent, no duplicate blocks).
+5. Only after step 3 or 4 succeeds, send a concise execution result.
+6. Do not ask for "next task" before finishing this sync.
 
 ### 3) Tool-Call Format Contract
 
@@ -308,6 +318,7 @@ AskUserQuestion rules:
 - Explaining `Write`/`Edit` JSON without actually invoking `Write`/`Edit` when file mutation is required.
 - Repeating apologies instead of recovery actions.
 - Stopping a long task without checkpointing status.
+- After `/use-codex-llm`, asking for the next task before `CLAUDE.md` sync is executed.
 
 ## Completion Checklist
 
