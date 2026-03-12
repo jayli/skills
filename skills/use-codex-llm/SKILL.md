@@ -84,6 +84,12 @@ respond in Claude Code-recognized execution format instead of narrative-only tex
 - Do not claim an execution result unless it came from an actual tool/command response.
 - Use narrative-only responses only when no execution action is needed for the next step.
 
+Invocation task binding:
+- Treat `/use-codex-llm` itself as an explicit executable task:
+  synchronize this skill's canonical constraints into repository-root `CLAUDE.md` immediately.
+- Therefore, on activation turn, execution action is required by definition
+  (not optional, and not "waiting for the user's next task").
+
 ### 2.2) Persistent Memory Contract via `CLAUDE.md` (Required)
 
 Do not rely only on short-term conversational memory for critical constraints.
@@ -110,11 +116,12 @@ Persist the active strong constraints in a repository memory file:
 
 Activation runbook (must execute in order):
 1. Resolve repository root and target path `CLAUDE.md`.
-2. Use `Read` on `CLAUDE.md` if present.
-3. If absent, use `Write` to create `CLAUDE.md` with this skill's canonical constraint section (English only).
-4. If present, use `Edit` to replace the existing canonical section in place (idempotent, no duplicate blocks).
-5. Only after step 3 or 4 succeeds, send a concise execution result.
-6. Do not ask for "next task" before finishing this sync.
+2. Prefer running `scripts/sync_claude_md.sh` when available to perform idempotent sync.
+3. If script is unavailable, use `Read` on `CLAUDE.md` if present.
+4. If absent, use `Write` to create `CLAUDE.md` with this skill's canonical constraint section (English only).
+5. If present, use `Edit` to replace the existing canonical section in place (idempotent, no duplicate blocks).
+6. Only after step 2, 4, or 5 succeeds, send a concise execution result.
+7. Do not ask for "next task" before finishing this sync.
 
 Activation enforcement:
 - On activation turn, primary action must be `tool_call` (or `command_run` only if needed to resolve path/context).
@@ -122,6 +129,13 @@ Activation enforcement:
 - Do not present mode/options (for example "append vs merge") before attempting sync.
 - If sync fails, report a concrete blocker with execution evidence and one minimal required input/permission.
 - Definition of done for activation: `CLAUDE.md` sync executed successfully, or a real blocker returned after execution attempt.
+
+Zero-text activation protocol (hard gate):
+- During `/use-codex-llm` activation handling, do not emit acknowledgment-only prose.
+- First model action must be an executable step toward `CLAUDE.md` sync (`Read`, `Write`, or `Edit`).
+- If the host UI prints an automatic "skill loaded" message, immediately continue with tool execution in the same activation flow without waiting for a new user task.
+- Any activation response that asks for the next task before a sync attempt is invalid and must be self-corrected by running sync immediately.
+- Do not output phrases such as "Please provide the next task" before sync attempt/result.
 
 ### 3) Tool-Call Format Contract
 
@@ -329,6 +343,8 @@ AskUserQuestion rules:
 - After `/use-codex-llm`, asking for the next task before `CLAUDE.md` sync is executed.
 - After `/use-codex-llm`, explaining why sync was skipped before any real sync attempt.
 - After `/use-codex-llm`, asking the user to choose "append vs merge" before any sync attempt.
+- After `/use-codex-llm`, returning acknowledgment-only text without any `CLAUDE.md` sync tool action.
+- After `/use-codex-llm`, outputting "please provide the next task" before sync attempt/result.
 
 ## Completion Checklist
 
@@ -336,6 +352,7 @@ AskUserQuestion rules:
 - [ ] Used Claude Code-recognized response format for the required next execution step.
 - [ ] On skill activation, executed immediate `CLAUDE.md` sync via `Write` or `Edit` before acknowledgment-only text.
 - [ ] On activation, attempted real sync before any explanation, options, or extra confirmation request.
+- [ ] Activation reply was not acknowledgment-only prose; it included immediate sync execution action.
 - [ ] Synced active strong constraints to repository-root `CLAUDE.md` (create/update as needed).
 - [ ] Replaced prior `CLAUDE.md` memory block in place (no duplicated constraint blocks).
 - [ ] Wrote the synchronized `CLAUDE.md` memory block in English.
