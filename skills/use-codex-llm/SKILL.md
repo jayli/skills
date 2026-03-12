@@ -94,6 +94,7 @@ Persist the active strong constraints in a repository memory file:
 - If it exists, update it to include the current strong constraints without removing unrelated valid content.
 - Use an idempotent update pattern: replace the prior constraint block instead of appending duplicates.
 - Keep one canonical section header for this skill's memory block and update that block in place.
+- Write or update the `CLAUDE.md` memory block in English only (no Chinese content in that block).
 - Keep the memory section concise, explicit, and directly actionable.
 - Re-read `CLAUDE.md` before continuing long or multi-step execution to avoid drift.
 - When skill constraints change, synchronize `CLAUDE.md` in the same workflow.
@@ -308,6 +309,7 @@ AskUserQuestion rules:
 - [ ] Used Claude Code-recognized response format for the required next execution step.
 - [ ] Synced active strong constraints to repository-root `CLAUDE.md` (create/update as needed).
 - [ ] Replaced prior `CLAUDE.md` memory block in place (no duplicated constraint blocks).
+- [ ] Wrote the synchronized `CLAUDE.md` memory block in English.
 - [ ] Used exact tool/command format when execution was required.
 - [ ] Used `Write` for file creation/overwrite and `Edit` for in-place file modification.
 - [ ] Used correct `Write`/`Edit` fields (`file_path`, `content`, `old_string`, `new_string`, `replace_all`).
