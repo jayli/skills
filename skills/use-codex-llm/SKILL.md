@@ -84,6 +84,20 @@ respond in Claude Code-recognized execution format instead of narrative-only tex
 - Do not claim an execution result unless it came from an actual tool/command response.
 - Use narrative-only responses only when no execution action is needed for the next step.
 
+### 2.2) Persistent Memory Contract via `CLAUDE.md` (Required)
+
+Do not rely only on short-term conversational memory for critical constraints.
+Persist the active strong constraints in a repository memory file:
+
+- Target file: repository-root `CLAUDE.md`.
+- If `CLAUDE.md` does not exist, create it.
+- If it exists, update it to include the current strong constraints without removing unrelated valid content.
+- Use an idempotent update pattern: replace the prior constraint block instead of appending duplicates.
+- Keep one canonical section header for this skill's memory block and update that block in place.
+- Keep the memory section concise, explicit, and directly actionable.
+- Re-read `CLAUDE.md` before continuing long or multi-step execution to avoid drift.
+- When skill constraints change, synchronize `CLAUDE.md` in the same workflow.
+
 ### 3) Tool-Call Format Contract
 
 - Use only tools that are actually available in the runtime.
@@ -292,6 +306,8 @@ AskUserQuestion rules:
 
 - [ ] Picked the correct primary action type for this turn.
 - [ ] Used Claude Code-recognized response format for the required next execution step.
+- [ ] Synced active strong constraints to repository-root `CLAUDE.md` (create/update as needed).
+- [ ] Replaced prior `CLAUDE.md` memory block in place (no duplicated constraint blocks).
 - [ ] Used exact tool/command format when execution was required.
 - [ ] Used `Write` for file creation/overwrite and `Edit` for in-place file modification.
 - [ ] Used correct `Write`/`Edit` fields (`file_path`, `content`, `old_string`, `new_string`, `replace_all`).
