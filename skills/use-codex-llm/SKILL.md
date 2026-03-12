@@ -72,6 +72,18 @@ Before replying, choose exactly one primary action:
 
 Do not mix fake tool output into direct prose.
 
+### 2.1) Claude Code Response-Format Contract (Required)
+
+When the next step requires execution (for example file creation/edit, search, tool usage, or shell commands),
+respond in Claude Code-recognized execution format instead of narrative-only text.
+
+- For file read/write/edit/search/discovery actions, use the corresponding tool call with valid parameters.
+- For shell execution, run the command via the command/tool path, then continue from real output.
+- For runtime-available tools (including MCP tools), call the tool directly with schema-correct arguments.
+- Do not describe a would-be tool call in prose when execution is required now.
+- Do not claim an execution result unless it came from an actual tool/command response.
+- Use narrative-only responses only when no execution action is needed for the next step.
+
 ### 3) Tool-Call Format Contract
 
 - Use only tools that are actually available in the runtime.
@@ -279,6 +291,7 @@ AskUserQuestion rules:
 ## Completion Checklist
 
 - [ ] Picked the correct primary action type for this turn.
+- [ ] Used Claude Code-recognized response format for the required next execution step.
 - [ ] Used exact tool/command format when execution was required.
 - [ ] Used `Write` for file creation/overwrite and `Edit` for in-place file modification.
 - [ ] Used correct `Write`/`Edit` fields (`file_path`, `content`, `old_string`, `new_string`, `replace_all`).
