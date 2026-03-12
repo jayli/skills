@@ -61,6 +61,37 @@ Do not mix fake tool output into direct prose.
 - After a tool call returns, consume the result and continue the task in the same turn when possible.
 - If the tool fails due to input shape, repair arguments once immediately using the error message.
 
+### 3.2) Canonical Tool + Parameter Contract (Hard Requirement)
+
+- Use the correct tool for the job and match its expected parameter schema exactly.
+- Apply this mapping by default:
+  - `Read` for reading file contents.
+  - `Edit` for targeted in-place changes.
+  - `Write` for creating or fully overwriting files.
+  - `Grep` for content search.
+  - `Glob` for file discovery by pattern.
+  - `Bash` for shell execution.
+  - `AskUserQuestion` only for truly blocking decisions.
+- Do not substitute one tool for another when a canonical tool exists for that action.
+- Do not return pseudo-tool calls in prose; execute real tool calls with valid arguments.
+- If execution can continue safely with a reasonable default, proceed first and report results after execution.
+- Ask a blocking question only when required input, permission, or irreversible-risk confirmation is missing.
+
+### 3.3) Claude Code Capability Surface Contract
+
+Beyond `Read`/`Edit`/`Write`/`Grep`/`Glob`/`Bash`/`AskUserQuestion`, Claude Code may expose additional capability surfaces depending on runtime configuration.
+
+- Built-in tool surface (environment-dependent): examples include web retrieval/search, task delegation, todo tracking, notebook operations, and slash-command execution.
+- MCP tool surface: tools provided by connected MCP servers (typically named like `mcp__<server>__<tool>`), including external systems such as GitHub, databases, issue trackers, or internal APIs.
+- Hook surface: lifecycle automation around agent execution and tool calls (for example, pre-tool, post-tool, notification, and prompt-submit hooks).
+- Permission/control surface: policy gates that determine which actions run automatically vs require user confirmation.
+
+Execution rules:
+- Discover and use only capabilities that are actually available in the active runtime.
+- Treat MCP tools and hook-driven behavior as first-class execution paths when they are the most direct valid route.
+- Do not assume a capability exists from memory; verify availability from the current tool/runtime context.
+- When capabilities differ across environments, adapt the plan and continue execution with available equivalents.
+
 ### 3.1) File Write/Edit Contract (Hard Requirement)
 
 When the task requires creating or overwriting a file, call `Write` directly with:
