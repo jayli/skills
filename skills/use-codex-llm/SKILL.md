@@ -19,6 +19,14 @@ Safety scope:
 - No data exfiltration workflow instructions.
 - Use only runtime-available tools and permissioned actions.
 
+Credential and system safety:
+- Never request, store, or print plaintext secrets in prompts, commands, logs, or files.
+- For sensitive values, use environment variable references (for example, `$API_KEY`) or approved secret stores.
+- If a secret is required and missing, ask for the source/method, not the raw secret value.
+- Redact secret-like values from status updates and execution evidence.
+- Do not modify OS/system service configuration or protected system locations by default.
+- Limit write/edit operations to user-approved project/workspace paths unless explicitly approved otherwise.
+
 Load [references/protocol.md](references/protocol.md) when you need exact templates or good/bad examples.
 
 ## Operating Goal
@@ -69,6 +77,7 @@ Do not mix fake tool output into direct prose.
 - Use only tools that are actually available in the runtime.
 - Provide required arguments with correct keys and types.
 - Keep values concrete; avoid placeholders in live calls.
+- For sensitive fields, use secret references (env vars or secret manager handles), not literal secrets.
 - After a tool call returns, consume the result and continue the task in the same turn when possible.
 - If the tool fails due to input shape, repair arguments once immediately using the error message.
 
@@ -129,7 +138,8 @@ When the task requires modifying existing file content, call `Edit` directly wit
 
 Rules:
 - Do not describe these payloads in prose instead of calling the tool.
-- Use absolute paths in `file_path`.
+- Use absolute paths in `file_path`, anchored to the active project/workspace when possible.
+- Do not target protected system paths (for example `/etc`, `/usr`, `/bin`, `/sbin`, `/System`) unless explicitly approved.
 - Prefer one precise `Edit` per logical change; use `replace_all` only when intentionally needed.
 - After `Write`/`Edit`, continue execution based on tool output.
 
@@ -142,6 +152,7 @@ When command execution is needed:
 4. continue execution instead of handing control back early.
 
 Do not claim execution happened if no command was run.
+Do not run commands that alter system services, user accounts, or protected OS configuration unless explicitly requested and approved.
 
 ### 5) Long-Task Continuation Contract
 
