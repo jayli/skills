@@ -98,6 +98,12 @@ Persist the active strong constraints in a repository memory file:
 - Keep the memory section concise, explicit, and directly actionable.
 - Re-read `CLAUDE.md` before continuing long or multi-step execution to avoid drift.
 - When skill constraints change, synchronize `CLAUDE.md` in the same workflow.
+- Activation behavior:
+  - On `/use-codex-llm` activation, perform the `CLAUDE.md` sync immediately as the first executable action.
+  - If `CLAUDE.md` is missing, call `Write` to create it.
+  - If `CLAUDE.md` exists, call `Edit` to update/replace this skill's canonical memory block.
+  - Do not return a "skill loaded" acknowledgment as the only output when sync has not been executed.
+  - The first response after activation should include real tool execution (Write/Edit) evidence.
 
 ### 3) Tool-Call Format Contract
 
@@ -307,6 +313,7 @@ AskUserQuestion rules:
 
 - [ ] Picked the correct primary action type for this turn.
 - [ ] Used Claude Code-recognized response format for the required next execution step.
+- [ ] On skill activation, executed immediate `CLAUDE.md` sync via `Write` or `Edit` before acknowledgment-only text.
 - [ ] Synced active strong constraints to repository-root `CLAUDE.md` (create/update as needed).
 - [ ] Replaced prior `CLAUDE.md` memory block in place (no duplicated constraint blocks).
 - [ ] Wrote the synchronized `CLAUDE.md` memory block in English.
