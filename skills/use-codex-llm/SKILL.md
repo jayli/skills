@@ -1,12 +1,23 @@
 ---
 name: use-codex-llm
-description: Use when integrating Codex-compatible models (for example gpt-5.3-codex) into Claude Code and reliability drops around command execution, tool-call formatting, instruction-following, or long-task continuation. Apply to restore stable Claude Code interaction contracts and reduce manual intervention.
+description: >-
+  Use when integrating Codex-compatible models (for example gpt-5.3-codex)
+  into Claude Code and reliability drops around command execution, tool-call
+  formatting, instruction-following, or long-task continuation. Apply to
+  restore stable Claude Code interaction contracts and reduce manual
+  intervention.
 ---
 
 # Use Codex LLM with Claude Code
 
 Enforce Claude Code interaction reliability when using Codex-compatible models.
 Prioritize strict protocol compliance over prose quality.
+
+Safety scope:
+- No credential harvesting or secret collection.
+- No hidden or encoded payload instructions.
+- No data exfiltration workflow instructions.
+- Use only runtime-available tools and permissioned actions.
 
 Load [references/protocol.md](references/protocol.md) when you need exact templates or good/bad examples.
 
@@ -31,7 +42,7 @@ Default behavior: complete as much executable work as possible before reporting 
   - account routing rejects the selected model.
 - Do not block execution only because a specific model name is unavailable; switch to an allowlisted fallback and continue.
 
-## Non-Negotiable Contracts
+## Required Contracts
 
 ### 1) Instruction Priority Contract
 
@@ -61,7 +72,7 @@ Do not mix fake tool output into direct prose.
 - After a tool call returns, consume the result and continue the task in the same turn when possible.
 - If the tool fails due to input shape, repair arguments once immediately using the error message.
 
-### 3.2) Canonical Tool + Parameter Contract (Hard Requirement)
+### 3.2) Canonical Tool + Parameter Contract (Required)
 
 - Use the correct tool for the job and match its expected parameter schema exactly.
 - Apply this mapping by default:
@@ -82,7 +93,9 @@ Do not mix fake tool output into direct prose.
 Beyond `Read`/`Edit`/`Write`/`Grep`/`Glob`/`Bash`/`AskUserQuestion`, Claude Code may expose additional capability surfaces depending on runtime configuration.
 
 - Built-in tool surface (environment-dependent): examples include web retrieval/search, task delegation, todo tracking, notebook operations, and slash-command execution.
-- MCP tool surface: tools provided by connected MCP servers (typically named like `mcp__<server>__<tool>`), including external systems such as GitHub, databases, issue trackers, or internal APIs.
+- MCP tool surface: tools provided by connected MCP servers
+  (typically named like `mcp__<server>__<tool>`), including external systems
+  such as GitHub, databases, issue trackers, or internal APIs.
 - Hook surface: lifecycle automation around agent execution and tool calls (for example, pre-tool, post-tool, notification, and prompt-submit hooks).
 - Permission/control surface: policy gates that determine which actions run automatically vs require user confirmation.
 
@@ -92,7 +105,7 @@ Execution rules:
 - Do not assume a capability exists from memory; verify availability from the current tool/runtime context.
 - When capabilities differ across environments, adapt the plan and continue execution with available equivalents.
 
-### 3.1) File Write/Edit Contract (Hard Requirement)
+### 3.1) File Write/Edit Contract (Required)
 
 When the task requires creating or overwriting a file, call `Write` directly with:
 
@@ -169,7 +182,7 @@ Evidence must be factual and tied to actual execution output.
 - For clarification, use the `AskUserQuestion` tool schema recognized by Claude Code SDK flows.
 - Prefer tool-native interaction over ad-hoc pseudo-protocol text.
 
-### 10) AskUserQuestion Contract (Strict)
+### 10) AskUserQuestion Contract (Required Format)
 
 - Ask questions only when execution cannot safely continue without user input.
 - In question turns, use AskUserQuestion-compatible JSON payload only.
@@ -188,7 +201,7 @@ When interaction degrades, recover in this order:
 3. **bounded fallback**: switch to a simpler valid action path.
 4. **blocker report**: request one missing input/permission with exact need.
 
-Avoid open-ended “how do you want to proceed” loops unless the user explicitly asks for options.
+Avoid open-ended "how do you want to proceed" loops unless the user explicitly asks for options.
 
 ## Response Skeletons
 
@@ -243,7 +256,7 @@ AskUserQuestion rules:
 - Keep JSON strictly valid (no trailing commas, no comments).
 - Ask the minimum blocking question set, then resume execution after answer.
 
-## Anti-Patterns (Forbidden)
+## Anti-Patterns (Do Not Do)
 
 - Inventing a tool call or tool output.
 - Sending partial plans without taking any real action.
