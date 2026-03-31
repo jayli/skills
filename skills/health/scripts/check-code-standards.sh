@@ -13,6 +13,9 @@ get_standards_issues_file() {
         Python) echo "${SCRIPT_DIR}/../.python_standards_issues.txt" ;;
         Go) echo "${SCRIPT_DIR}/../.go_standards_issues.txt" ;;
         Cpp) echo "${SCRIPT_DIR}/../.cpp_standards_issues.txt" ;;
+        Ruby) echo "${SCRIPT_DIR}/../.ruby_standards_issues.txt" ;;
+        PHP) echo "${SCRIPT_DIR}/../.php_standards_issues.txt" ;;
+        Rust) echo "${SCRIPT_DIR}/../.rust_standards_issues.txt" ;;
         *) echo "${SCRIPT_DIR}/../.js_standards_issues.txt" ;;
     esac
 }
@@ -39,6 +42,15 @@ check_code_standards() {
             ;;
         Cpp)
             result=$(bash "${SCRIPT_DIR}/checkers/cpp/standards.sh" 2>/dev/null || echo "0:0")
+            ;;
+        Ruby)
+            result=$(bash "${SCRIPT_DIR}/checkers/ruby/standards.sh" 2>/dev/null || echo "0:0")
+            ;;
+        PHP)
+            result=$(bash "${SCRIPT_DIR}/checkers/php/standards.sh" 2>/dev/null || echo "0:0")
+            ;;
+        Rust)
+            result=$(bash "${SCRIPT_DIR}/checkers/rust/standards.sh" 2>/dev/null || echo "0:0")
             ;;
         *)
             result=$(bash "${SCRIPT_DIR}/checkers/js/standards.sh" 2>/dev/null || echo "0:0")

@@ -13,6 +13,9 @@ get_observability_issues_file() {
         Python) echo "${SCRIPT_DIR}/../.python_observability_issues.txt" ;;
         Go) echo "${SCRIPT_DIR}/../.go_observability_issues.txt" ;;
         Cpp) echo "${SCRIPT_DIR}/../.cpp_observability_issues.txt" ;;
+        Ruby) echo "${SCRIPT_DIR}/../.ruby_observability_issues.txt" ;;
+        PHP) echo "${SCRIPT_DIR}/../.php_observability_issues.txt" ;;
+        Rust) echo "${SCRIPT_DIR}/../.rust_observability_issues.txt" ;;
         *) echo "${SCRIPT_DIR}/../.js_observability_issues.txt" ;;
     esac
 }
@@ -39,6 +42,15 @@ check_observability() {
             ;;
         Cpp)
             result=$(bash "${SCRIPT_DIR}/checkers/cpp/observability.sh" 2>/dev/null || echo "0:0")
+            ;;
+        Ruby)
+            result=$(bash "${SCRIPT_DIR}/checkers/ruby/observability.sh" 2>/dev/null || echo "0:0")
+            ;;
+        PHP)
+            result=$(bash "${SCRIPT_DIR}/checkers/php/observability.sh" 2>/dev/null || echo "0:0")
+            ;;
+        Rust)
+            result=$(bash "${SCRIPT_DIR}/checkers/rust/observability.sh" 2>/dev/null || echo "0:0")
             ;;
         *)
             result=$(bash "${SCRIPT_DIR}/checkers/js/observability.sh" 2>/dev/null || echo "0:0")

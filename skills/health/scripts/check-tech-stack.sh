@@ -13,6 +13,9 @@ get_tech_stack_issues_file() {
         Python) echo "${SCRIPT_DIR}/../.python_tech_stack_issues.txt" ;;
         Go) echo "${SCRIPT_DIR}/../.go_tech_stack_issues.txt" ;;
         Cpp) echo "${SCRIPT_DIR}/../.cpp_tech_stack_issues.txt" ;;
+        Ruby) echo "${SCRIPT_DIR}/../.ruby_tech_stack_issues.txt" ;;
+        PHP) echo "${SCRIPT_DIR}/../.php_tech_stack_issues.txt" ;;
+        Rust) echo "${SCRIPT_DIR}/../.rust_tech_stack_issues.txt" ;;
         *) echo "${SCRIPT_DIR}/../.js_tech_stack_issues.txt" ;;
     esac
 }
@@ -39,6 +42,15 @@ check_tech_stack() {
             ;;
         Cpp)
             result=$(bash "${SCRIPT_DIR}/checkers/cpp/tech_stack.sh" 2>/dev/null || echo "0:0")
+            ;;
+        Ruby)
+            result=$(bash "${SCRIPT_DIR}/checkers/ruby/tech_stack.sh" 2>/dev/null || echo "0:0")
+            ;;
+        PHP)
+            result=$(bash "${SCRIPT_DIR}/checkers/php/tech_stack.sh" 2>/dev/null || echo "0:0")
+            ;;
+        Rust)
+            result=$(bash "${SCRIPT_DIR}/checkers/rust/tech_stack.sh" 2>/dev/null || echo "0:0")
             ;;
         *)
             result=$(bash "${SCRIPT_DIR}/checkers/js/tech_stack.sh" 2>/dev/null || echo "0:0")

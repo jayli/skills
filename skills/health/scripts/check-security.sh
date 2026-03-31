@@ -15,6 +15,9 @@ get_security_issues_file() {
         Python) echo "${SCRIPT_DIR}/../.python_security_issues.txt" ;;
         Go) echo "${SCRIPT_DIR}/../.go_security_issues.txt" ;;
         Cpp) echo "${SCRIPT_DIR}/../.cpp_security_issues.txt" ;;
+        Ruby) echo "${SCRIPT_DIR}/../.ruby_security_issues.txt" ;;
+        PHP) echo "${SCRIPT_DIR}/../.php_security_issues.txt" ;;
+        Rust) echo "${SCRIPT_DIR}/../.rust_security_issues.txt" ;;
         *) echo "${SCRIPT_DIR}/../.js_security_issues.txt" ;;
     esac
 }
@@ -41,6 +44,15 @@ check_security() {
             ;;
         Cpp)
             result=$(bash "${SCRIPT_DIR}/checkers/cpp/security.sh" 2>/dev/null || echo "0:0")
+            ;;
+        Ruby)
+            result=$(bash "${SCRIPT_DIR}/checkers/ruby/security.sh" 2>/dev/null || echo "0:0")
+            ;;
+        PHP)
+            result=$(bash "${SCRIPT_DIR}/checkers/php/security.sh" 2>/dev/null || echo "0:0")
+            ;;
+        Rust)
+            result=$(bash "${SCRIPT_DIR}/checkers/rust/security.sh" 2>/dev/null || echo "0:0")
             ;;
         *)
             result=$(bash "${SCRIPT_DIR}/checkers/js/security.sh" 2>/dev/null || echo "0:0")

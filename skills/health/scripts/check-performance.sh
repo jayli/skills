@@ -13,6 +13,9 @@ get_performance_issues_file() {
         Python) echo "${SCRIPT_DIR}/../.python_performance_issues.txt" ;;
         Go) echo "${SCRIPT_DIR}/../.go_performance_issues.txt" ;;
         Cpp) echo "${SCRIPT_DIR}/../.cpp_performance_issues.txt" ;;
+        Ruby) echo "${SCRIPT_DIR}/../.ruby_performance_issues.txt" ;;
+        PHP) echo "${SCRIPT_DIR}/../.php_performance_issues.txt" ;;
+        Rust) echo "${SCRIPT_DIR}/../.rust_performance_issues.txt" ;;
         *) echo "${SCRIPT_DIR}/../.js_performance_issues.txt" ;;
     esac
 }
@@ -39,6 +42,15 @@ check_performance() {
             ;;
         Cpp)
             result=$(bash "${SCRIPT_DIR}/checkers/cpp/performance.sh" 2>/dev/null || echo "0:0")
+            ;;
+        Ruby)
+            result=$(bash "${SCRIPT_DIR}/checkers/ruby/performance.sh" 2>/dev/null || echo "0:0")
+            ;;
+        PHP)
+            result=$(bash "${SCRIPT_DIR}/checkers/php/performance.sh" 2>/dev/null || echo "0:0")
+            ;;
+        Rust)
+            result=$(bash "${SCRIPT_DIR}/checkers/rust/performance.sh" 2>/dev/null || echo "0:0")
             ;;
         *)
             result=$(bash "${SCRIPT_DIR}/checkers/js/performance.sh" 2>/dev/null || echo "0:0")

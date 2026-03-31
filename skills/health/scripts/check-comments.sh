@@ -13,6 +13,9 @@ get_comments_issues_file() {
         Python) echo "${SCRIPT_DIR}/../.python_comments_issues.txt" ;;
         Go) echo "${SCRIPT_DIR}/../.go_comments_issues.txt" ;;
         Cpp) echo "${SCRIPT_DIR}/../.cpp_comments_issues.txt" ;;
+        Ruby) echo "${SCRIPT_DIR}/../.ruby_comments_issues.txt" ;;
+        PHP) echo "${SCRIPT_DIR}/../.php_comments_issues.txt" ;;
+        Rust) echo "${SCRIPT_DIR}/../.rust_comments_issues.txt" ;;
         *) echo "${SCRIPT_DIR}/../.js_comments_issues.txt" ;;
     esac
 }
@@ -39,6 +42,15 @@ check_comments() {
             ;;
         Cpp)
             result=$(bash "${SCRIPT_DIR}/checkers/cpp/comments.sh" 2>/dev/null || echo "0:0")
+            ;;
+        Ruby)
+            result=$(bash "${SCRIPT_DIR}/checkers/ruby/comments.sh" 2>/dev/null || echo "0:0")
+            ;;
+        PHP)
+            result=$(bash "${SCRIPT_DIR}/checkers/php/comments.sh" 2>/dev/null || echo "0:0")
+            ;;
+        Rust)
+            result=$(bash "${SCRIPT_DIR}/checkers/rust/comments.sh" 2>/dev/null || echo "0:0")
             ;;
         *)
             result=$(bash "${SCRIPT_DIR}/checkers/js/comments.sh" 2>/dev/null || echo "0:0")

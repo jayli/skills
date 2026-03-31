@@ -13,6 +13,9 @@ get_unused_issues_file() {
         Python) echo "${SCRIPT_DIR}/../.python_unused_issues.txt" ;;
         Go) echo "${SCRIPT_DIR}/../.go_unused_issues.txt" ;;
         Cpp) echo "${SCRIPT_DIR}/../.cpp_unused_issues.txt" ;;
+        Ruby) echo "${SCRIPT_DIR}/../.ruby_unused_issues.txt" ;;
+        PHP) echo "${SCRIPT_DIR}/../.php_unused_issues.txt" ;;
+        Rust) echo "${SCRIPT_DIR}/../.rust_unused_issues.txt" ;;
         *) echo "${SCRIPT_DIR}/../.js_unused_issues.txt" ;;
     esac
 }
@@ -39,6 +42,15 @@ check_unused_code() {
             ;;
         Cpp)
             result=$(bash "${SCRIPT_DIR}/checkers/cpp/unused.sh" 2>/dev/null || echo "0:0")
+            ;;
+        Ruby)
+            result=$(bash "${SCRIPT_DIR}/checkers/ruby/unused.sh" 2>/dev/null || echo "0:0")
+            ;;
+        PHP)
+            result=$(bash "${SCRIPT_DIR}/checkers/php/unused.sh" 2>/dev/null || echo "0:0")
+            ;;
+        Rust)
+            result=$(bash "${SCRIPT_DIR}/checkers/rust/unused.sh" 2>/dev/null || echo "0:0")
             ;;
         *)
             result=$(bash "${SCRIPT_DIR}/checkers/js/unused.sh" 2>/dev/null || echo "0:0")

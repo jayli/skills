@@ -13,6 +13,9 @@ get_complexity_issues_file() {
         Python) echo "${SCRIPT_DIR}/../.python_complexity_issues.txt" ;;
         Go) echo "${SCRIPT_DIR}/../.go_complexity_issues.txt" ;;
         Cpp) echo "${SCRIPT_DIR}/../.cpp_complexity_issues.txt" ;;
+        Ruby) echo "${SCRIPT_DIR}/../.ruby_complexity_issues.txt" ;;
+        PHP) echo "${SCRIPT_DIR}/../.php_complexity_issues.txt" ;;
+        Rust) echo "${SCRIPT_DIR}/../.rust_complexity_issues.txt" ;;
         *) echo "${SCRIPT_DIR}/../.js_complexity_issues.txt" ;;
     esac
 }
@@ -39,6 +42,15 @@ check_complexity() {
             ;;
         Cpp)
             result=$(bash "${SCRIPT_DIR}/checkers/cpp/complexity.sh" 2>/dev/null || echo "0:0")
+            ;;
+        Ruby)
+            result=$(bash "${SCRIPT_DIR}/checkers/ruby/complexity.sh" 2>/dev/null || echo "0:0")
+            ;;
+        PHP)
+            result=$(bash "${SCRIPT_DIR}/checkers/php/complexity.sh" 2>/dev/null || echo "0:0")
+            ;;
+        Rust)
+            result=$(bash "${SCRIPT_DIR}/checkers/rust/complexity.sh" 2>/dev/null || echo "0:0")
             ;;
         *)
             result=$(bash "${SCRIPT_DIR}/checkers/js/complexity.sh" 2>/dev/null || echo "0:0")
