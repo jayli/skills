@@ -1,17 +1,24 @@
 ---
 name: claude-oil
-description: 为 CLAUDE.md 注入"润滑油"，让第三方大模型（如 kimi、qwen ）与 Claude Code 的配合达到丝滑流畅、不中断的效果。适用于 API 形式接入 Claude Code 的非 Claude 官方模型。
-user-invocable: true
+description: "为 CLAUDE.md 注入"润滑油"，让第三方模型与 Claude Code 配合更流畅。仅当用户通过 /claude-oil 显式调用时触发，不自动触发。"
 ---
 
 # Claude 润滑油 (claude-oil)
 
 > 让第三方模型与 Claude Code 的配合如丝般顺滑
 
+## 触发条件
+
+**本 skill 仅通过显式调用触发，绝不自动触发。**
+
+- ✅ `/claude-oil` — 用户明确输入完整 skill 名称时触发
+- ❌ 上下文匹配、关键词匹配、隐式条件 — 均不触发
+
+这是为了避免在执行正常任务时，被本 skill 的执行契约覆盖原有行为。
+
 ## 使用场景
 
-当你使用以下方式接入 Claude Code 时：
-- kimi/qwen/glm API 接入
+当你通过 `/claude-oil` 显式调用本 skill，且使用第三方模型 API（如 kimi/qwen/glm）接入 Claude Code 时：
 
 遇到这些问题：
 - 任务执行到一半突然中断等待确认
@@ -204,4 +211,4 @@ Next: <下一步>
 
 ---
 
-*目标：让 kimi/qwen/glm 也能像 Claude Opus 一样丝滑*
+*目标：让第三方模型也能像 Claude 一样丝滑*
