@@ -1,11 +1,14 @@
 ---
 name: export_codex
-description: Use when running in Codex and needing to export the current session conversation after the latest clear into project-local log files.
+description: Export current Codex CLI session conversation to project-local log files. MUST only trigger when explicitly invoked by skill name (/export_codex) — never auto-trigger.
+user-invocable: true
 ---
 
 # export_codex
 
 This skill is only for Codex CLI sessions.
+
+**IMPORTANT: This skill must ONLY be triggered when the user explicitly invokes it by name (`/export_codex`). Do not auto-trigger or context-trigger this skill under any circumstances.**
 
 ## Purpose
 
